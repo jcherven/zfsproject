@@ -37,24 +37,23 @@ extract_tarball()
 }
 
 #### Main logic
-
-## Check if target directory is specified, exit if absent
-if [ $# -eq 0 ]]
+if [[ $# -eq 0 ]]
 then
-        echo "No target directory specified"
+        echo "Target directory must be specified as an absolute path (aborting)"
         exit 1
+else
+    ## Enter the target directory
+    pushd $1
+
+    download_tarball $url1
+
+    extract_tarball $package1
+
+    ## Delete the downloaded archive after extracting
+    rm -f $package1
+
+    ## Exit the target directory
+    popd
 fi
 
-## Enter the target directory
-pushd $1
-
-download_tarball $url1
-
-extract_tarball $package1
-
-## Delete the downloaded archive after extracting
-rm $package1
-
-## Exit the target directory
-popd
-
+exit 0
