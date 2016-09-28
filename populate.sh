@@ -38,6 +38,13 @@ extract_tarball()
 
 #### Main logic
 
+## Check if target directory is specified, exit if absent
+if [ $# -eq 0 ]]
+then
+        echo "No target directory specified"
+        exit 1
+fi
+
 ## Enter the target directory
 pushd $1
 
