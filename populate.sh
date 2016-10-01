@@ -7,14 +7,12 @@
 
 targetdir=$1
 url1="rsync://rsync.kernel.org/pub/linux/kernel/v4.x/linux-4.7.tar.xz"
-#url2="rsync://rsync.kernel.org/pub/linux/kernel/v3.x/linux-3.19.tar.xz"
 package1="linux-4.7.tar.xz"
-#package2="linux-3.19.tar.xz"
 
 #### Functions
 
 ## Download the tarball if it doesn't exist, skip downloading if it does.
-## Accepts one of the constant variables for the tarball link.
+## Accepts the path passed by the user.
 download_tarball()
 {
     if [ ! -e "$1" ]
@@ -27,7 +25,7 @@ download_tarball()
 # end download_tarball()
 
 ## Extract the tarball if it exists
-## Accepts one of the variables for the package name
+## Accepts the constant variable for the package name
 extract_tarball()
 {
     if [ -e "$1" ]
