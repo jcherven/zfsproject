@@ -2,18 +2,25 @@
 
 set -x
  
-url="https://www.kernel.org/pub/linux/kernel/v3.0/"
-rsyncurl="rsync://rsync.kernel.org/pub/linux/kernel/v3.0/"
-targetdir=~/testdir/
-patchver="patch-3.0."
+linuxver="3.0"
+url=https://www.kernel.org/pub/linux/kernel/v"$linuxver"/incr/
+rsyncurl=rsync://rsync.kernel.org/pub/linux/kernel/v"$linuxver"/incr/
+targetdir=~/testdir/linux/
+patchver=patch-"$linuxver"
 
-for minor in {0..10}; do
-    if curl --head --silent --fail --list-only "$url""$patchver""$minor".gz
-    then
-        rsync --no-motd -uP "$rsyncurl""$patchver""$minor".gz "$targetdir"
-        gunzip ~/testdir/"$patchver""$minor".gz
+pushd "$targetdir"
+
+for current in {0..10}; do
+    for incremental in {0..10}; do   
+        if curl --head --silent --fail --list-only "$url""$patchver"."$current"-"$incremental".gz
+        then
+            rsync --no-motd -uP "$rsyncurl""$patchver"."$current"-"$incremental".gz "$targetdir"
+            gunzip "$patchver"."$current"-"$incremental".gz
+            patch -p1 < "$targetdir""$patchver"."$current"-"$incremental"
     fi
-    
+    done    
 done
+
+popd
 
 exit 0
