@@ -19,7 +19,7 @@ export "$zpool"
 echo "$zpool is exported"
 ##corrupt the raw disk
 #for i in 24 do
-        targetblock=shuf --input-range=1-$upperbound --head-count=1
+targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
         echo "targetblock is $targetblock"
     ## run a loop that chooses a random disk and seeks to a random block,
     ## writing garbage onto it from /dev/urandom
