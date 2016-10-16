@@ -6,7 +6,7 @@ set -x
 zpool="anaheim"
 
 ## Available disks
-disks=(disk01 disk02 disk03 disk04)
+disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
 ## Get available device size in blocks for shuf command from blockdev 
 
@@ -21,7 +21,7 @@ targetdisk=${disks[disknum]}
 echo "target disk is $targetdisk"
 
 # Pick a random block to $targetblock
-upperbound=$(blockdev --report | awk -v var="$disk01$" '$7 ~ var {print $6}')
+upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
 targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
 echo "targetblock is $targetblock"
     ## run a loop that chooses a random disk and seeks to a random block,
