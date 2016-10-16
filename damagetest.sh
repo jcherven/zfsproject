@@ -37,7 +37,7 @@ until [ "$damagedblocks" -le 0 ]; do
     upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
-    damagedblocks=$((damagedblocks - 1))
+    let "damagedblocks-=1"
 done
     
 # Seeks to the target block on the target disk, then writes one block of garbage over it
