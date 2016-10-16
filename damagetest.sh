@@ -12,7 +12,7 @@ disk04="/dev/sdd"
 
 
 ## Get available device size in blocks for shuf command from blockdev 
-upperbound=$(blockdev --report | awk -v var="$disk01" '$7 ~ "var$" {print $6}') 
+upperbound=$(blockdev --report | awk -v var="$disk01" '$7 ~ "var" {print $6}') 
 echo "upperbound is $upperbound"
 ## export the zpool to keep ZFS from self-healing the damage
 zpool export "$zpool"
