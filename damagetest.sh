@@ -3,12 +3,12 @@
 set -x
 
 ## Global variables
-#zpool="$1"
-damagelevel="$1"
+zpool="$1"
+damagelevel="$2"
 ## Available disks
 disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
-case "$1" in
+case "$2" in
         1)
                 damagedblocks=20
                 ;;
@@ -21,7 +21,7 @@ case "$1" in
 esac
 
 ## export the zpool to keep ZFS from self-healing the damage
-#zpool export "$zpool"
+zpool export "$zpool"
 
 ##corrupt the raw disk
 
@@ -38,17 +38,15 @@ until [ "$damagedblocks" -le 0 ]; do
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
     damagedblocks=$((damagedblocks - 1 ))
-done
-    
 # Seeks to the target block on the target disk, then writes one block of garbage over it
-# dd bs="$blocksize" count=1 seek="$targetblock" if=/dev/urandom of="$targetdisk"
-
+dd bs="$blocksize" count=1 seek="$targetblock" if=/dev/urandom of="$targetdisk"
+done
 
 ## import the zpool
-#zpool import "$zpool"
+zpool import "$zpool"
 
 ## scrub the zpool and display results of corruption
-##zpool scrub "$zpool"
-##zpool status -v "$zpool"
+zpool scrub "$zpool"
+zpool status -v "$zpool"
 
 exit 0
