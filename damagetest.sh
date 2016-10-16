@@ -39,7 +39,7 @@ until [ "$damagedblocks" -le 0 ]; do
     echo "Target disk is now $targetdisk, target block is now $targetblock"
     damagedblocks=$((damagedblocks - 1 ))
 # Seeks to the target block on the target disk, then writes one block of garbage over it
-dd bs="$blocksize" count=1 seek="$targetblock" if=/dev/urandom of="$targetdisk"
+dd bs="$blocksize" count=1 seek="$targetblock" if=/dev/urandom of="$targetdisk1"
 done
 
 ## import the zpool
