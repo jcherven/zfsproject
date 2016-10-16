@@ -33,7 +33,7 @@ targetdisk=${disks[disknum]}
 blocksize=$(blockdev --getbsz $targetdisk)
 
 ## Target a random block from $targetdisk for corruption
-until [ "$damagedblocks" -le "0" ]; do 
+until [ "$damagedblocks" -le 0 ]; do 
     upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
