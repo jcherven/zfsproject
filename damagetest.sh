@@ -3,10 +3,22 @@
 set -x
 
 ## Global variables
-zpool="$1"
-damagelevel="$2"
+#zpool="$1"
+damagelevel="$1"
 ## Available disks
 disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
+
+case "$2" in
+        1)
+                damagedblocks=20
+                ;;
+        2)
+                damagedblocks=10000
+                ;;
+        3)
+                damagedblocks=100000
+                ;;
+esac
 
 ## export the zpool to keep ZFS from self-healing the damage
 #zpool export "$zpool"
@@ -21,12 +33,13 @@ targetdisk=${disks[disknum]}
 blocksize=$(blockdev --getbsz $targetdisk)
 
 ## Target a random block from $targetdisk for corruption
-for i in 10; do        
+until [ "$damagedblocks" -le "0" ]; do 
     upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
+    damagedblocks=$((damagedblocks - 1))
 done
-
+    
 # Seeks to the target block on the target disk, then writes one block of garbage over it
 # dd bs="$blocksize" count=1 seek="$targetblock" if=/dev/urandom of="$targetdisk"
 
