@@ -24,21 +24,19 @@ esac
 zpool export "$zpool"
 
 ##corrupt the raw disk
-
-# Target a random disk for corruption 
-# Get a random element from $disks
-disknum=$(($RANDOM % 4))
-targetdisk=${disks[disknum]}
-# Get the maximum block number of $targetdisk as an upperbound for $targetblock
-blocksize=$(blockdev --getbsz $targetdisk)
-
 ## Target a random block from $targetdisk for corruption
 until [ "$damagedblocks" -le 0 ]; do 
+    # Target a random disk for corruption 
+    # Get a random element from $disks
+    disknum=$(($RANDOM % 4))
+    targetdisk=${disks[disknum]}
+    # Get the maximum block number of $targetdisk as an upperbound for $targetblock
+    blocksize=$(blockdev --getbsz $targetdisk)
     upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
     damagedblocks=$((damagedblocks - 1 ))
-# Seeks to the target block on the target disk, then writes one block of garbage over it
+# Skips to the target block on the target disk, then writes one block of garbage over it
 dd bs="$blocksize" count=1 skip="$targetblock" if=/dev/urandom of="$targetdisk"1
 done
 
