@@ -15,7 +15,7 @@ disk04="/dev/sdd"
 upperbound=$(blockdev --report | awk '$7 ~ '$disk01$' {print $6}') 
 echo "upperbound is $upperbound"
 ## export the zpool to keep ZFS from self-healing the damage
-export "$zpool"
+zpool export "$zpool"
 echo "$zpool is exported"
 ##corrupt the raw disk
 #for i in 24 do
@@ -26,7 +26,7 @@ targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     ## 
 
 ## import the zpool
-import "$zpool"
+zpool import "$zpool"
 echo "$zpool is imported"
 
 ## scrub the zpool and display results of corruption
