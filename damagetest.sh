@@ -28,7 +28,7 @@ zpool export "$zpool"
 until [ "$damagedblocks" -le 0 ]; do 
     # Target a random disk for corruption 
     # Get a random element from $disks
-    disknum=$(($RANDOM % ))
+    disknum=$(($RANDOM % 4 ))
     targetdisk=${disks[disknum]}
     # Get the maximum block number of $targetdisk as an upperbound for $targetblock
     blocksize=$(blockdev --getbsz $targetdisk)
