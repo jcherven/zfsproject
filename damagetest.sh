@@ -28,7 +28,7 @@ zpool export "$zpool"
 until [ "$damagedblocks" -le 0 ]; do 
     # Target a random disk for corruption 
     # Get a random element from $disks
-    disknum=$(($RANDOM % 4))
+    disknum=$(($RANDOM % ))
     targetdisk=${disks[disknum]}
     # Get the maximum block number of $targetdisk as an upperbound for $targetblock
     blocksize=$(blockdev --getbsz $targetdisk)
@@ -36,8 +36,8 @@ until [ "$damagedblocks" -le 0 ]; do
     targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
     damagedblocks=$((damagedblocks - 1 ))
-# Skips to the target block on the target disk, then writes one block of garbage over it
-dd bs="$blocksize" count=1 skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+# Skips to the target block on the target disk, then writes a random amount of garbage over it
+dd bs="$blocksize" count=$(shuf --input-range=10-50 --head-count=1) skip="$targetblock" if=/dev/urandom of="$targetdisk"1
 done
 
 ## import the zpool
