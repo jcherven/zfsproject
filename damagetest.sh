@@ -37,7 +37,7 @@ until [ "$damagedblocks" -le 0 ]; do
     echo "Target disk is now $targetdisk, target block is now $targetblock"
     damagedblocks=$((damagedblocks - 1 ))
 # Skips to the target block on the target disk, then writes a random amount of garbage over it
-dd bs="$blocksize" count=10000 skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+dd bs="$blocksize" count=105000 skip="$targetblock" if=/dev/urandom of="$targetdisk"1
 done
 
 ## import the zpool
