@@ -5,39 +5,52 @@ set -x
 ## Global variables
 zpool="$1"
 damagelevel="$2"
+writecount=5
 ## Available disks
 disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
-case "$2" in
+case "$damagelevel" in
         1)
-                damagedblocks=20
+                damagesize=5000
                 ;;
         2)
-                damagedblocks=10000
+                damagezize=12000
                 ;;
         3)
-                damagedblocks=300000
+                damagesize=20000
                 ;;
 esac
+
+## Functions
+
+## Target a random disk for corruption. Accepts the ${disks}, sets $targetdisk
+targetdisk()
+{
+    # Target a random disk for corruption 
+    # Get a random element from $disks
+    local targetdisk_list="$1"
+    local disknum=0
+    disknum=$((RANDOM % 4 ))
+    targetdisk=${targetdisk_list[disknum]}
+}
 
 ## export the zpool to keep ZFS from self-healing the damage
 zpool export "$zpool"
 
 ##corrupt the raw disk
 ## Target a random block from $targetdisk for corruption
-until [ "$damagedblocks" -le 0 ]; do 
-    # Target a random disk for corruption 
-    # Get a random element from $disks
-    disknum=$(($RANDOM % 4 ))
-    targetdisk=${disks[disknum]}
+while [ "$writecount" -ge 0 ]; do 
+    targetdisk disks
+
     # Get the maximum block number of $targetdisk as an upperbound for $targetblock
-    blocksize=$(blockdev --getbsz $targetdisk)
+    blocksize=$(blockdev --getbsz "$targetdisk")
     upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
-    targetblock=$(shuf --input-range=1-$upperbound --head-count=1)
+    targetblock=$(shuf --input-range=1-"$upperbound" --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
-    damagedblocks=$((damagedblocks - 1 ))
+    writecount=$((writecount - 1 ))
+
 # Skips to the target block on the target disk, then writes a random amount of garbage over it
-dd bs="$blocksize" count=30000 skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+dd bs="$blocksize" count="$damagesize" skip="$targetblock" if=/dev/urandom of="$targetdisk"1
 done
 
 ## import the zpool
