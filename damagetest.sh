@@ -11,13 +11,13 @@ disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
 case "$damagelevel" in
         1)
-                writesize=1000
+                writesize=100
                 ;;
         2)
-                writesize=2000
+                writesize=500
                 ;;
         3)
-               writesize=5000
+               writesize=1000
                 ;;
 esac
 
