@@ -23,10 +23,9 @@ esac
 
 ## Functions
 
-# Target a random disk for corruption. Accepts the array ${disks}, sets $targetdisk
+# Target a random disk for corruption. Uses the global array ${disks}, sets $targetdisk
 choose_disk()
 {
-    local choose_disk_list="$1"
     # Get a random device from ${disks}
     local choose_disk_selection=$((RANDOM % 4 ))
     # Set the global $targetdisk
@@ -61,7 +60,7 @@ zpool export "$zpool"
 
 # Select a target and perform the destructive write
 while [ "$writecount" -ge 0 ]; do 
-    choose_disk disks
+    choose_disk 
     get_diskstats
     write_damage
     writecount=$((writecount - 1 ))
