@@ -38,9 +38,11 @@ get_diskstats()
 {
     # Need to determine the blocksize of the device as an upper bound for the target block
     blocksize=$(blockdev --getbsz "$targetdisk")
-    # Get the maximum block number of $targetdisk as an upperbound for $targetblock.
+    # Get the size in blocks of $targetdisk as an upperbound for $targetblock.
+    upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
     # Leave headroom for the largest possible write.
-    upperbound=$((blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}') - "$damagesize")
+    upperbound=$((upperbound - damagesize))
+    # Choose a block to start the destructive write.
     targetblock=$(shuf --input-range=1-"$upperbound" --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
 }
