@@ -29,7 +29,7 @@ choose_disk()
     # Get a random device from ${disks}
     local choose_disk_selection=$((RANDOM % 4 ))
     # Set the global $targetdisk
-    targetdisk=${choose_disk_list[choose_disk_selection]}
+    targetdisk=${disks[choose_disk_selection]}
 }
 
 # Selects a random location of the target disk to perform the destructive write
