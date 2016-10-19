@@ -23,41 +23,54 @@ esac
 
 ## Functions
 
-## Target a random disk for corruption. Accepts the ${disks}, sets $targetdisk
-targetdisk()
+# Target a random disk for corruption. Accepts the array ${disks}, sets $targetdisk
+choose_disk()
 {
-    # Target a random disk for corruption 
-    # Get a random element from $disks
-    local targetdisk_list="$1"
-    local disknum=0
-    disknum=$((RANDOM % 4 ))
-    targetdisk=${targetdisk_list[disknum]}
+    local choose_disk_list="$1"
+    # Get a random device from ${disks}
+    local choose_disk_selection=$((RANDOM % 4 ))
+    # Set the global $targetdisk
+    targetdisk=${choose_disk_list[choose_disk_selection]}
 }
 
-## export the zpool to keep ZFS from self-healing the damage
-zpool export "$zpool"
-
-##corrupt the raw disk
-## Target a random block from $targetdisk for corruption
-while [ "$writecount" -ge 0 ]; do 
-    targetdisk disks
-
-    # Get the maximum block number of $targetdisk as an upperbound for $targetblock
+# Selects a random location of the target disk to perform the destructive write
+get_diskstats()
+{
+    # Need to determine the blocksize of the device as an upper bound for the target block
     blocksize=$(blockdev --getbsz "$targetdisk")
-    upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}')
+    # Get the maximum block number of $targetdisk as an upperbound for $targetblock.
+    # Leave headroom for the largest possible write.
+    upperbound=$(blockdev --report | awk -v var="$targetdisk$" '$7 ~ var {print $6}') - "$damagesize"
     targetblock=$(shuf --input-range=1-"$upperbound" --head-count=1)
     echo "Target disk is now $targetdisk, target block is now $targetblock"
-    writecount=$((writecount - 1 ))
+}
 
-# Skips to the target block on the target disk, then writes a random amount of garbage over it
-dd bs="$blocksize" count="$damagesize" skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+write_damage()
+{
+    # Skips to the target block on the target disk, then writes
+    # a random amount of garbage over it. 
+    dd bs="$blocksize" count="$damagesize" skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+}
+
+## Main
+
+# export the zpool to keep ZFS from self-healing the damage
+zpool export "$zpool"
+
+# Select a target and perform the destructive write
+while [ "$writecount" -ge 0 ]; do 
+    choose_disk disks
+    get_diskstats
+    write_damage
+    writecount=$((writecount - 1 ))
 done
 
-## import the zpool
+# import the zpool
 zpool import "$zpool"
 
-## scrub the zpool and display results of corruption
+# scrub the zpool and display results of corruption
 zpool scrub "$zpool"
 zpool status -v "$zpool"
+## End Main
 
 exit 0
