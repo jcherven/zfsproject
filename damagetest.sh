@@ -5,7 +5,7 @@ set -x
 ## Global variables
 zpool="$1"
 damagelevel="$2"
-writecount=5
+writecount=3
 ## Available disks
 disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
