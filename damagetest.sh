@@ -11,13 +11,13 @@ disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
 case "$damagelevel" in
         1)
-                damagesize=5000
+                writesize=1000
                 ;;
         2)
-                damagezize=12000
+                writesize=2000
                 ;;
         3)
-                damagesize=20000
+               writesize=5000
                 ;;
 esac
 
@@ -50,7 +50,7 @@ write_damage()
 {
     # Skips to the target block on the target disk, then writes
     # a random amount of garbage over it. 
-    dd bs="$blocksize" count="$damagesize" skip="$targetblock" if=/dev/urandom of="$targetdisk"1
+    dd bs="$blocksize" count="$writesize" skip="$targetblock" if=/dev/urandom of="$targetdisk"1
 }
 
 ## Main
