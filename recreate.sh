@@ -7,5 +7,5 @@ zpool create -f anaheim mirror disk01 disk02 mirror disk03 disk04
 zfs create anaheim
 zfs create anaheim/data
 
-source ./populate.sh anaheim && source ./workload.sh /anaheim/data
+source ./populate.sh anaheim/data && source ./workload.sh /anaheim/data
 exit 0
