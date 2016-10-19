@@ -5,7 +5,7 @@ set -x
 ## Global variables
 zpool="$1"
 damagelevel="$2"
-writecount=1
+writecount=5
 ## Available disks
 disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
@@ -56,7 +56,7 @@ write_damage()
 ## Main
 
 # export the zpool to keep ZFS from self-healing the damage
-zpool export "$zpool"
+#zpool export "$zpool"
 
 # Select a target and perform the destructive write
 while [ "$writecount" -ge 0 ]; do 
@@ -67,7 +67,7 @@ while [ "$writecount" -ge 0 ]; do
 done
 
 # import the zpool
-zpool import "$zpool"
+#zpool import "$zpool"
 
 # scrub the zpool and display results of corruption
 zpool scrub "$zpool"
