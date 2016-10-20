@@ -1,6 +1,5 @@
 #! /bin/bash
 
-<<<<<<< HEAD
 ## Check if this is being run as root
 if [ $(id --user) -ne 0 ]
         then
@@ -8,10 +7,7 @@ if [ $(id --user) -ne 0 ]
 		exit
 	fi
 
-# set -x
-=======
 #set -x
->>>>>>> 580c11f878c860034bf7b5c365ce6b8b1ddae0b7
 
 ## populate.sh - Populates a filesystem with a realistic directory and
 ## file tree using Linux kernel tarballs from kernel.org
