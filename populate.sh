@@ -72,6 +72,7 @@ do
 			;;
 		:)
 			echo "target dierectory for -$OPTARG must be specified"
+			;;
 		?)
 			echo "populate.sh: unknown option -$OPTARG"
 			usage
