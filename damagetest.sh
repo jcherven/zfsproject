@@ -11,13 +11,13 @@ disks=('/dev/sda' '/dev/sdb' '/dev/sdc' '/dev/sdd')
 
 case "$damagelevel" in
         1)
-                writesize=100
+                writesize=1000
                 ;;
         2)
-                writesize=500
+                writesize=2000
                 ;;
         3)
-               writesize=1000
+               writesize=4000
                 ;;
 esac
 
@@ -59,7 +59,7 @@ write_damage()
 #zpool export "$zpool"
 
 # Select a target and perform the destructive write
-while [ "$writecount" -ge 0 ]; do 
+while [ "$writecount" -ge 1 ]; do 
     choose_disk 
     get_diskstats
     write_damage

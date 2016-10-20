@@ -34,4 +34,4 @@ done
 
 popd
 
-exit 0
+return 0

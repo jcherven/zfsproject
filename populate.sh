@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# set -x
+#set -x
 
 ## populate.sh - Populates a filesystem with a realistic directory and
 ## file tree using Linux kernel tarballs from kernel.org
@@ -18,10 +18,10 @@ package1=linux-"$linuxver".tar.xz
 ## Accepts the path passed by the user.
 download_tarball()
 {
-    if [ ! -e "$1" ]
+    if [ ! -e "$HOME"/"$1" ]
     then
             # hit the rsync daemon, suppress the MOTD, show progress, and skip if the file exists
-            rsync --no-motd -uP "$1" "$(pwd)"
+            rsync --no-motd -uP "$1" "$HOME"
     fi
     return 0
 }
@@ -31,9 +31,9 @@ download_tarball()
 ## Accepts the constant variable for the package name
 extract_tarball()
 {
-    if [ -e "$1" ]
+    if [ -e "$HOME"/"$1" ]
     then
-        tar -xvf "$1"
+        tar -xvf "$HOME"/"$1" --directory="$targetdir" 
     else
         echo "Could not extract, archive did not download properly (aborting)"
         return 1
@@ -64,4 +64,4 @@ else
     popd
 fi
 
-exit 0
+return 0
