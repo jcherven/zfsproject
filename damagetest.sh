@@ -1,5 +1,13 @@
 #!/bin/bash
 ## Usage: ./damage.sh [ZPOOL] [DAMAGE LEVEL{1,2,3}]
+
+## Check if this is being run as root
+if [ $(id --user) -ne 0 ]
+	then
+		echo "Aborting: damage.sh must be run as root"
+		exit
+	fi
+	
 set -x
 
 ## Global variables

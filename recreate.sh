@@ -1,5 +1,11 @@
 #! /bin/bash
 
+if [ $(id --user) -ne 0 ]
+	then
+		echo "Aborting: recreate.sh must be run as root"
+		exit
+	fi
+
 set -x
 
 zpool destroy anaheim

@@ -5,6 +5,12 @@
 ## Usage: ./populate.sh {path to target directory}
 ## target directory path must not have a trailing slash
 
+if [ $(id --user) -ne 0 ]
+	then
+		echo "Aborting: workload.sh must be run as root"
+		exit
+	fi
+
 set -x
  
 linuxver="3.0"

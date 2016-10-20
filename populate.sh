@@ -1,5 +1,12 @@
 #! /bin/bash
 
+## Check if this is being run as root
+if [ $(id --user) -ne 0 ]
+        then
+		echo "Aborting: populate.sh must be run as root"
+		exit
+	fi
+
 # set -x
 
 ## populate.sh - Populates a filesystem with a realistic directory and
