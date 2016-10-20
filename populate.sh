@@ -55,7 +55,7 @@ else
     extract_tarball "$package1"
 
     ## Delete the downloaded archive after extracting
-    rm -f "$package1"
+    #rm -f "$package1"
 
     ## Rename the root folder for easier scripting later on
     mv linux-"$linuxver" linux
