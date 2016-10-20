@@ -5,7 +5,7 @@ set -x
 zpool destroy anaheim
 
 #zpool create -f anaheim mirror disk01 disk02 mirror disk03 disk04
-zpool create -f anaheim raidz2 disk01 disk02 disk 03 disk04
+zpool create -f anaheim raidz2 disk01 disk02 disk03 disk04
 
 zfs create anaheim/data
 
