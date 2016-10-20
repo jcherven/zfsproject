@@ -1,5 +1,8 @@
 #! /bin/bash
 
+## populate.sh - Populates a filesystem with a realistic directory and
+## file tree using Linux kernel tarballs from kernel.org
+
 ## Check if this is being run as root
 if [ $(id --user) -ne 0 ]
         then
@@ -8,9 +11,6 @@ if [ $(id --user) -ne 0 ]
 	fi
 
 #set -x
-
-## populate.sh - Populates a filesystem with a realistic directory and
-## file tree using Linux kernel tarballs from kernel.org
 
 #### Constants
 
@@ -48,27 +48,65 @@ extract_tarball()
     return 0
 }
 
-#### Main logic
-if [[ $# -eq 0 ]]
+#### Options handling and user interface
+
+# Displays usage information
+usage()
+{
+	echo "usage: $0 -d /path/to/target"
+}
+
+# Eliminate any trailing slashes in the target argument
+targetdir="${targetdir%/}"
+
+while getopts ":hd:" option
+do
+	case "$option" in
+		d)
+			targetdir="$OPTARG"
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		:)
+			echo "target dierectory for -$OPTARG must be specified"
+		?)
+			echo "populate.sh: unknown option -$OPTARG"
+			usage
+			exit 1
+			;;
+		esac
+done
+	
+if [ -z "$targetdir" ]
 then
-        echo "Target directory must be specified (aborting)"
-        exit 1
-else
-    ## Enter the target directory
-    pushd "$targetdir"
-
-    download_tarball "$url1"
-
-    extract_tarball "$package1"
-
-    ## Delete the downloaded archive after extracting
-    #rm -f "$package1"
-
-    ## Rename the root folder for easier scripting later on
-    mv linux-"$linuxver" linux
-
-    ## Exit the target directory
-    popd
+	echo "populate.sh: specify a target directory with -d"
+	usage
+	exit 1
 fi
+
+if [ ! -d "$targetdir" ]
+then
+	echo "populate.sh: -d must be a directory and it must already exist"
+	exit 1
+fi
+
+#### Main logic
+# Enter the target directory
+pushd "$targetdir"
+
+download_tarball "$url1"
+
+extract_tarball "$package1"
+
+## Delete the downloaded archive after extracting
+#rm -f "$package1"
+
+## Rename the root folder for easier scripting later on
+mv linux-"$linuxver" linux
+
+## Exit the target directory
+popd
 
 return 0
