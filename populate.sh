@@ -13,7 +13,7 @@ if [ $(id --user) -ne 0 ]
 	fi
 
 
-#### Constants
+#### Global variables
 
 targetdir=""
 linuxver="3.0.4"
