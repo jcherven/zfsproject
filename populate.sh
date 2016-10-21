@@ -3,7 +3,7 @@
 ## populate.sh - Populates a filesystem with a realistic directory and
 ## file tree using Linux kernel tarballs from kernel.org
 
-set -x
+#set -x
 
 ## Check if this is being run as root
 if [ $(id --user) -ne 0 ]
@@ -23,20 +23,19 @@ package1=linux-"$linuxver".tar.xz
 #### Functions
 
 ## Download the tarball if it doesn't exist, skip downloading if it does.
-## Accepts the path passed by the user.
+## Accepts $targetdir.
 download_tarball()
 {
     if [ ! -e "$HOME"/"$1" ]
     then
-            # hit the rsync daemon, suppress the MOTD, show progress, and skip if the file exists
-            rsync --no-motd -uP "$1" "$HOME"
+        # hit the rsync daemon, suppress the MOTD, show progress, and skip if the file exists
+        rsync --no-motd -uP "$1" "$HOME"
     fi
     return 0
 }
 # end download_tarball()
 
-## Extract the tarball if it exists
-## Accepts the constant variable for the package name
+## Extract the tarball if it exists. Accepts $package1.
 extract_tarball()
 {
     if [ -e "$HOME"/"$1" ]
@@ -60,6 +59,7 @@ usage()
 # Eliminate any trailing slashes in the target argument
 targetdir="${targetdir%/}"
 
+# Process options and arguments. Provide a standard way to get usage help.
 while getopts ":hd:" option
 do
 	case "$option" in
@@ -101,9 +101,6 @@ pushd "$targetdir"
 download_tarball "$url1"
 
 extract_tarball "$package1"
-
-## Delete the downloaded archive after extracting
-#rm -f "$package1"
 
 ## Rename the root folder for easier scripting later on
 mv linux-"$linuxver" linux
