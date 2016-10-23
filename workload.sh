@@ -20,12 +20,25 @@ targetdir="$1"/linux
 patchver=patch-"$linuxver"
 
 #### Functions
+checkifpatch()
+{
+    curl --head --silent --fail --list-only "$url""$patchver"."$current"-"$incremental".gz
+    return $?
+}
+
 downloadpatch()
 {
     rsync --no-motd -uP "$rsyncurl""$patchver"."$current"-"$incremental".gz "$targetdir" 
     return 0
 }
 
+## Extracts and patches
+applypatch()
+{
+    gunzip "$targetdir"/"$patchver"."$current"-"$incremental".gz
+    patch -p1 < "$targetdir"/"$patchver"."$current"-"$incremental"
+    return 0
+}
 
 #### Options handling and user interface
 
@@ -36,17 +49,15 @@ pushd "$targetdir"
 for current in {4..101}; do
     # Use a C-style loop so that a variable can be used/set in the incremental version number
     for (( incremental = current ; incremental <= 101 ; incremental += 1 )); do  
-
         # Check if the patch exists without cluttering up stdout
-        if curl --head --silent --fail --list-only "$url""$patchver"."$current"-"$incremental".gz
+        if checkifpatch
         then
             # Download the patch to the source root, unzip, and patch the tree.
-            # Break after patching.
             downloadpatch 
-            gunzip "$targetdir"/"$patchver"."$current"-"$incremental".gz
-            patch -p1 < "$targetdir"/"$patchver"."$current"-"$incremental"
+            applypatch
+            # Break after patching.
             break
-    fi
+        fi
     done    
 done
 
