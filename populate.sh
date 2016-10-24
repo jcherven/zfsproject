@@ -56,9 +56,6 @@ usage()
 	echo "usage: $0 -d /path/to/target"
 }
 
-# Eliminate any trailing slashes in the target argument
-targetdir="${targetdir%/}"
-
 # Process options and arguments. Provide a standard way to get usage help.
 while getopts ":hd:" option
 do
@@ -80,7 +77,10 @@ do
 			;;
 		esac
 done
-	
+
+## Eliminate any trailing slashes in the target argument
+targetdir="${targetdir%/}"
+
 if [ -z "$targetdir" ]
 then
 	echo "populate.sh: specify a target directory with -d"
