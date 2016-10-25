@@ -76,13 +76,13 @@ if [ -z "$targetdir" ]
 then
         echo "workload.sh: specify a target directory with -d"
         usage
-        exit1
+        exit 1
 fi
 
 if [ ! -d "$targetdir" ]
 then
         echo "workload.sh: -d must be a directory and it must already exist"
-        exit1
+        exit 1
 fi
 
 #### Main logic
