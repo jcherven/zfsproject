@@ -3,7 +3,9 @@
 ## populate.sh - Populates a filesystem with a realistic directory and
 ## file tree using Linux kernel tarballs from kernel.org
 
-#set -x
+set -x
+set -e
+set -o
 
 ## Check if this is being run as root
 if [ $(id --user) -ne 0 ]
