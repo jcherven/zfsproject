@@ -3,7 +3,7 @@
 ## workload.sh - creates a simulated workload on the filesystem by incrementally
 ## downloading and patching the Linux kernel 3.0.X source tree.
 
-set -x
+#set -x
 
 ## Check if this is being run as root
 if [ $(id --user) -ne 0 ]
