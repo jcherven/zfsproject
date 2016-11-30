@@ -24,7 +24,7 @@ usage()
         echo "usage: "$0""
 }
 
-# Destroy the existing pool at run
+# zdestroy - Destroy the existing pool at run
 zdestroy()
 {
         if [ -e "$pool-anaheim-dir" ]
@@ -37,7 +37,7 @@ zdestroy()
         return 0
 }
 
-# Create the new pool
+# zcreate - Create the new pool
 zcreate()
 {
         if [ ! -e "$pool-anaheim-dir" ]
@@ -53,25 +53,26 @@ zcreate()
         return 0
 }
 
-# Call the populate script
+# populate - Call the populate script
 populate()
 {
         source "$HOME"/zfsproject/populate.sh -d "$pool-anaheim-dir"/data
 }
 
-# Call the workload script
+# workload - Call the workload script
 workload()
 {
         source "$HOME"/zfsproject/workload.sh -d "$pool-anaheim-dir"/data
 }
 
-# Call the benchmark script
+# benchmark - Call the benchmark script
 benchmark()
 {
-        echo "Pretending to run benchmark.sh"
-        sleep 1
+        # echo "Pretending to run benchmark.sh"
+        # Run top in batch mode to write to a file,
+        # with a measurement delay of 0.5 seconds
+        top -b -d 0.5 > "$HOME"/$(date +%Y%m%d_%H%M%S%Z).txt &
 }
-
 
 #### Options handling and user interface
 while getopts ":h" option
@@ -81,10 +82,9 @@ do
                         usage
                         exit 0
                         ;;
-
-                :)
-                        echo "something isn't working in the option handling"
-                        ;;
+                #:)
+                #        echo "something isn't working in the option handling"
+                #        ;;
                 ?)
                         echo "wrapper.sh: unknown option -$OPTARG"
                         usage
@@ -97,9 +97,9 @@ done
 
 zdestroy
 zcreate
+#benchmark 
 populate
 workload
-benchmark
 
 ## zpool destroy anaheim
 
