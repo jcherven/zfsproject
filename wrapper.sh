@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -o
-set -x
+#set -o
+#set -x
 set -e
 
 ## wrapper.sh - One-shots the population, workload, and benchmarking scripts.
@@ -47,6 +47,7 @@ zcreate()
                 zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
                 echo "Creating dataset called data inside "$poolanaheim"".
                 zfs create "$poolanaheim"/data
+                echo "Zpool "$poolanaheim" created and mounted at "$poolanaheimdir""
         else
                echo ""$poolanaheim" already exists. Cannot create an existing zpool."
                return 1
@@ -57,13 +58,17 @@ zcreate()
 # populate - Call the populate script
 populate()
 {
+        echo "Populating zpool "$poolanaheim"..."
         source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data > /dev/null
+        echo ""$poolanaheim" populated."
 }
 
 # workload - Call the workload script
 workload()
 {
+        echo "Running synthetic workload now..."
         source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data > /dev/null
+        echo "Workload complete."
 }
 
 # benchmark - Call the benchmark script
@@ -103,18 +108,6 @@ populate
 wait
 workload
 wait
-
-## zpool destroy anaheim
-
-#zpool create -f anaheim mirror disk01 disk02 mirror disk03 disk04
-# zpool create -f anaheim raidz2 disk01 disk02 disk03 disk04
-
-# zfs create anaheim/data
-
-# source populate.sh /anaheim/data
-
-# source workload.sh /anaheim/data
-
-# zpool status -v
+zpool status -v
 
 exit 0
