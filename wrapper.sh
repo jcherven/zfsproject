@@ -13,8 +13,8 @@ set -e
 	#fi
 
 #### Global variables
-$pool-anaheim="anaheim"
-$pool-anaheim-dir="/"$pool-anaheim""
+pool-anaheim="anaheim"
+pool-anaheim-dir="/"$pool-anaheim""
 
 #### Functions
 
