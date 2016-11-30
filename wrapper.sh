@@ -30,7 +30,7 @@ zdestroy()
 {
         if [ -e "$poolanaheimdir" ]
         then
-                echo "Existing zpool present. Destroying with the \`command zpool destroy "$poolanaheim"\`"
+                echo "Existing zpool present. Destroying with the command \` zpool destroy "$poolanaheim"\`"
                 zpool destroy "$poolanaheim"
         else
                 echo "zpool "$poolanaheim" not present."
