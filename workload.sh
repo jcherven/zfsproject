@@ -48,26 +48,26 @@ usage()
 }
 
 #### Options handling and user interface
-#while getopts ":hd:" option
-#do
-#        case "$option" in
-#                d)
-#                        targetdir="$OPTARG"
-#                        ;;
-#                h)
-#                        usage
-#                        exit 0
-#                        ;;
-#                :)
-#                        echo "target directory for -$OPTARG must be specified"
-#                        ;;
-#                ?)
-#                        echo "workload.sh: unknown option -$OPTARG"
-#                        usage
-#                        exit 1
-#                        ;;
-#        esac
-#done
+while getopts ":hd:" option
+do
+        case "$option" in
+                d)
+                        targetdir="$OPTARG"
+                        ;;
+                h)
+                        usage
+                        exit 0
+                        ;;
+                :)
+                        echo "target directory for -$OPTARG must be specified"
+                        ;;
+                ?)
+                        echo "workload.sh: unknown option -$OPTARG"
+                        usage
+                        exit 1
+                        ;;
+        esac
+done
 
 #### Eliminate any trailing slashes in the target argument
 #targetdir="${targetdir%/}"
