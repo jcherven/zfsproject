@@ -4,7 +4,7 @@
 ## file tree using Linux kernel tarballs from kernel.org
 
 #set -x
-#set -e
+set -e
 #set -o
 
 ## Check if this is being run as root
@@ -17,7 +17,6 @@ if [ $(id --user) -ne 0 ]
 
 #### Global variables
 
-targetdir=""
 linuxver="3.0.4"
 url1=rsync://rsync.kernel.org/pub/linux/kernel/v3.0/linux-"$linuxver".tar.xz
 package1=linux-"$linuxver".tar.xz

@@ -69,14 +69,14 @@ do
 done
 
 #### Eliminate any trailing slashes in the target argument
-#targetdir="${targetdir%/}"
+targetdir="${targetdir%/}"
 
-#if [ -z "$targetdir" ]
-#then
-#        echo "workload.sh: specify a target directory with -d"
-#        usage
-#        exit 1
-#fi
+if [ -z "$targetdir" ]
+then
+        echo "workload.sh: specify a target directory with -d"
+        usage
+        exit 1
+fi
 
 if [ ! -d "$targetdir" ]
 then
