@@ -56,7 +56,7 @@ zcreate()
 # populate - Call the populate script
 populate()
 {
-        source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data
+        source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data > /dev/null
 }
 
 # workload - Call the workload script
