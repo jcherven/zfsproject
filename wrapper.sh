@@ -58,7 +58,7 @@ zcreate()
 # populate - Call the populate script
 populate()
 {
-        echo "Populating zpool "$poolanaheim"..."
+        echo "Populating zpool "$poolanaheim", please wait..."
         source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data > /dev/null
         echo ""$poolanaheim" populated."
 }
@@ -66,7 +66,7 @@ populate()
 # workload - Call the workload script
 workload()
 {
-        echo "Running synthetic workload now..."
+        echo "Running synthetic workload now (this takes a while)..."
         source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data > /dev/null
         echo "Workload complete."
 }
@@ -83,7 +83,7 @@ benchmark()
 zstatus()
 {
         zpool status -v
-        zfs list -v
+        zfs list
 }
 
 #### Options handling and user interface
