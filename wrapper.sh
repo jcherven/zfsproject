@@ -62,7 +62,7 @@ populate()
 # workload - Call the workload script
 workload()
 {
-        source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data
+        source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data > /dev/null
 }
 
 # benchmark - Call the benchmark script
