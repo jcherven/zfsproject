@@ -57,12 +57,14 @@ zcreate()
 populate()
 {
         source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data
+        wait
 }
 
 # workload - Call the workload script
 workload()
 {
         source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data
+        wait
 }
 
 # benchmark - Call the benchmark script
