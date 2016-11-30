@@ -30,7 +30,7 @@ zdestroy()
 {
         if [ -e "$poolanaheimdir" ]
         then
-                echo "Existing zpool present. Destroying with the command zpool destroy "$poolanaheim""
+                echo "Existing zpool present. Destroying with the \`command zpool destroy "$poolanaheim"\`"
                 zpool destroy "$poolanaheim"
         else
                 echo "zpool "$poolanaheim" not present."
@@ -43,11 +43,11 @@ zcreate()
 {
         if [ ! -e "$poolanaheimdir" ]
         then
-                echo "Creating zpool "$poolanaheim""
+                echo "Creating zpool \""$poolanaheim"\""
                 zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
-                echo "Creating dataset called data inside "$poolanaheim"".
+                echo "Creating dataset called \"data\" inside "$poolanaheim"".
                 zfs create "$poolanaheim"/data
-                echo "Zpool "$poolanaheim" created and mounted at "$poolanaheimdir""
+                echo "Zpool \""$poolanaheim"\" created and mounted at "$poolanaheimdir""
         else
                echo ""$poolanaheim" already exists. Cannot create an existing zpool."
                return 1
