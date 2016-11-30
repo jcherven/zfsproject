@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -o
 set -x
 set -e
 
