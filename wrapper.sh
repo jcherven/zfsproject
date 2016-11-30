@@ -13,8 +13,8 @@ set -e
 	#fi
 
 #### Global variables
-pool-anaheim="anaheim"
-pool-anaheim-dir="/"$pool-anaheim""
+poolanaheim="anaheim"
+poolanaheimdir="/"$poolanaheim""
 
 #### Functions
 
@@ -27,12 +27,12 @@ usage()
 # zdestroy - Destroy the existing pool at run
 zdestroy()
 {
-        if [ -e "$pool-anaheim-dir" ]
+        if [ -e "$poolanaheimdir" ]
         then
-                echo "Existing zpool present. Destroying with the command zpool destroy "$pool-anaheim""
-                zpool destroy "$pool-anaheim"
+                echo "Existing zpool present. Destroying with the command zpool destroy "$poolanaheim""
+                zpool destroy "$poolanaheim"
         else
-                echo "zpool "$pool-anaheim" not present."
+                echo "zpool "$poolanaheim" not present."
         fi
         return 0
 }
@@ -40,14 +40,14 @@ zdestroy()
 # zcreate - Create the new pool
 zcreate()
 {
-        if [ ! -e "$pool-anaheim-dir" ]
+        if [ ! -e "$poolanaheimdir" ]
         then
-                echo "Creating zpool "$pool-anaheim""
-                zpool create "$pool-anaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
-                echo "Creating dataset called data inside "$pool-anaheim"".
-                zfs create "$pool-anaheim"/data
+                echo "Creating zpool "$poolanaheim""
+                zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
+                echo "Creating dataset called data inside "$poolanaheim"".
+                zfs create "$poolanaheim"/data
         else
-               echo ""$pool-anaheim" already exists. Cannot create an existing zpool."
+               echo ""$poolanaheim" already exists. Cannot create an existing zpool."
                return 1
         fi
         return 0
@@ -56,13 +56,13 @@ zcreate()
 # populate - Call the populate script
 populate()
 {
-        source "$HOME"/zfsproject/populate.sh -d "$pool-anaheim-dir"/data
+        source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data
 }
 
 # workload - Call the workload script
 workload()
 {
-        source "$HOME"/zfsproject/workload.sh -d "$pool-anaheim-dir"/data
+        source "$HOME"/zfsproject/workload.sh -d "$poolanaheimdir"/data
 }
 
 # benchmark - Call the benchmark script
