@@ -16,7 +16,6 @@ if [ $(id --user) -ne 0 ]
 linuxver="3.0"
 url=https://www.kernel.org/pub/linux/kernel/v"$linuxver"/incr/
 rsyncurl=rsync://rsync.kernel.org/pub/linux/kernel/v"$linuxver"/incr/
-targetdir=""
 patchver=patch-"$linuxver"
 
 #### Functions
