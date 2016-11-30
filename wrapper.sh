@@ -80,6 +80,12 @@ benchmark()
         top -b -d 0.5 > "$HOME"/$(date +%Y%m%d_%H%M%S%Z).txt &
 }
 
+zstatus()
+{
+        zpool status -v
+        zfs list -v
+}
+
 #### Options handling and user interface
 while getopts ":h" option
 do
@@ -108,6 +114,6 @@ populate
 wait
 workload
 wait
-zpool status -v
+zstatus
 
 exit 0
