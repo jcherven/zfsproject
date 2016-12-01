@@ -6,7 +6,7 @@ set -e
 
 ## wrapper.sh - One-shots the population, workload, and benchmarking scripts.
 
-Check if this is being run as root
+# Check if this is being run as root
 if [ $(id --user) -ne 0 ]
 	then
 		echo "Aborting: wrapper.sh must be run as root"
