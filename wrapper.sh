@@ -117,9 +117,7 @@ zdestroy
 zcreate
 benchmark 
 populate
-wait
 workload
-wait
 zstatus
 
 exit 0
