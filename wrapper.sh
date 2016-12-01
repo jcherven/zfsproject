@@ -82,7 +82,9 @@ benchmark()
         # echo "Pretending to run benchmark.sh"
         # Run top in batch mode to write to a file,
         # with a measurement delay of 0.5 seconds
-        top -b -d 0.5 > $(pwd)/CPU-$(date +%Y%m%d_%H%M%S%Z).txt &
+        cpufile="$(pwd)/CPU-$(date +%Y%m%d_%H%M%S%Z).txt"
+        top -b -d 0.5 > cpufile.temp &
+        grep -F "cpu" "cpufile.temp" > "$cpufile"  
 }
 
 # display some information about the storage pools' activity
