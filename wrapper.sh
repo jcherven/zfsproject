@@ -6,12 +6,12 @@ set -e
 
 ## wrapper.sh - One-shots the population, workload, and benchmarking scripts.
 
-## Check if this is being run as root
-#if [ $(id --user) -ne 0 ]
-	#then
-	#	echo "Aborting: wrapper.sh must be run as root"
-	#	exit
-	#fi
+Check if this is being run as root
+if [ $(id --user) -ne 0 ]
+	then
+		echo "Aborting: wrapper.sh must be run as root"
+		exit
+	fi
 
 #### Global variables
 poolanaheim="anaheim"
@@ -82,13 +82,14 @@ benchmark()
         # echo "Pretending to run benchmark.sh"
         # Run top in batch mode to write to a file,
         # with a measurement delay of 0.5 seconds
-        top -b -d 0.5 > "$HOME"/$(date +%Y%m%d_%H%M%S%Z).txt &
+        top -b -d 0.5 > $(pwd)/CPU-$(date +%Y%m%d_%H%M%S%Z).txt &
 }
 
+# display some information about the storage pools' activity
 zstatus()
 {
-        zpool list -v
         zfs list
+        zpool list -v
 }
 
 #### Options handling and user interface
@@ -114,7 +115,7 @@ done
 
 zdestroy
 zcreate
-#benchmark 
+benchmark 
 populate
 wait
 workload
