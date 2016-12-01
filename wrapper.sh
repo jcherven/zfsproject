@@ -84,7 +84,7 @@ benchmark()
         # with a measurement delay of 0.5 seconds
         cpufile="$(pwd)/CPU-$(date +%Y%m%d_%H%M%S%Z).txt"
         top -b -d 0.5 > cpufile.temp &
-        grep -F "cpu" "cpufile.temp" > "$cpufile"  
+ 
 }
 
 # display some information about the storage pools' activity
@@ -121,5 +121,6 @@ benchmark
 populate
 workload
 zstatus
+grep -F "cpu" "cpufile.temp" > "$cpufile" 
 
 exit 0
