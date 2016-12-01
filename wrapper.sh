@@ -29,7 +29,9 @@ usage()
 zdestroy()
 {
         # Try to mount anaheim in case it exists but is not mounted
-        zfs mount "$poolanaheim" > /dev/null
+        set +e
+        zfs mount "$poolanaheim" &> /dev/null
+        set -e
 
         if [ -e "$poolanaheimdir" ]
         then
