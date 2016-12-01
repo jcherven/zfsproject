@@ -48,11 +48,11 @@ zcreate()
 {
         if [ ! -e "$poolanaheimdir" ]
         then
-                echo "Creating zpool \""$poolanaheim"\"."
-                zfs create "$poolanaheim"/data
                 echo "Zpool \""$poolanaheim"\" created and mounted at "$poolanaheimdir"."
                 zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
                 echo "Creating dataset called \"data\" inside "$poolanaheim"."
+                echo "Creating zpool \""$poolanaheim"\"."
+                zfs create "$poolanaheim"/data
         else
                echo ""$poolanaheim" already exists. Cannot create an existing zpool."
                return 1
