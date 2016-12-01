@@ -28,6 +28,9 @@ usage()
 # zdestroy - Destroy the existing pool at run
 zdestroy()
 {
+        # Try to mount anaheim in case it exists but is not mounted
+        zfs mount "$poolanaheim" > /dev/null
+
         if [ -e "$poolanaheimdir" ]
         then
                 echo "Existing zpool present. Destroying with the command \` zpool destroy "$poolanaheim"\`"
@@ -43,11 +46,11 @@ zcreate()
 {
         if [ ! -e "$poolanaheimdir" ]
         then
-                echo "Creating zpool \""$poolanaheim"\""
-                zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
-                echo "Creating dataset called \"data\" inside "$poolanaheim"".
+                echo "Creating zpool \""$poolanaheim"\"."
                 zfs create "$poolanaheim"/data
-                echo "Zpool \""$poolanaheim"\" created and mounted at "$poolanaheimdir""
+                echo "Zpool \""$poolanaheim"\" created and mounted at "$poolanaheimdir"."
+                zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
+                echo "Creating dataset called \"data\" inside "$poolanaheim"."
         else
                echo ""$poolanaheim" already exists. Cannot create an existing zpool."
                return 1
@@ -82,7 +85,7 @@ benchmark()
 
 zstatus()
 {
-        zpool status -v
+        zpool list -v
         zfs list
 }
 
