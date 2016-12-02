@@ -77,7 +77,8 @@ benchmark()
         # echo "Pretending to run benchmark.sh"
         # Run top in batch mode to write to a file,
         # with a measurement delay of 0.5 seconds
-        top -b -d 0.5 > "$HOME"/$(date +%Y%m%d_%H%M%S%Z).txt &
+        cpufile=""$HOME"/$(date +%Y%m%d_%H%M%S%Z)"
+        top -b -d 0.5 > "$cpufile".temp & 
 }
 
 zstatus()
@@ -109,11 +110,11 @@ done
 
 zdestroy
 zcreate
-#benchmark 
+benchmark 
 populate
-wait
 workload
-wait
 zstatus
+grep -F "Cpu" ""$cpufile".temp" | cut -c 37-39 > "$cpufile".txt
+#rm "$cpufile".temp
 
 exit 0
