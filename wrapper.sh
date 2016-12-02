@@ -35,10 +35,10 @@ zdestroy()
 
         if [ -e "$poolanaheimdir" ]
         then
-                echo "Existing zpool present. Destroying with the command \` zpool destroy "$poolanaheim"\`"
+                echo -e "Existing zpool present. Destroying with the command \` zpool destroy "$poolanaheim"\`\n"
                 zpool destroy "$poolanaheim"
         else
-                echo "zpool "$poolanaheim" not present."
+                echo -e "zpool "$poolanaheim" not present.\n"
         fi
         return 0
 }
@@ -51,7 +51,7 @@ zcreate()
                 echo "Zpool \""$poolanaheim"\" created and mounted at "$poolanaheimdir"."
                 zpool create "$poolanaheim" mirror /dev/sda /dev/sdb mirror /dev/sdc /dev/sdd
                 echo "Creating dataset called \"data\" inside "$poolanaheim"."
-                echo "Creating zpool \""$poolanaheim"\"."
+                echo -e "Creating zpool \""$poolanaheim"\".\n"
                 zfs create "$poolanaheim"/data
         else
                echo ""$poolanaheim" already exists. Cannot create an existing zpool."
@@ -82,6 +82,7 @@ capturecpu()
         # echo "Pretending to run benchmark.sh"
         # Run top in batch mode to write to a file,
         # with a measurement increment of 0.5 seconds
+        echo -e "Starting CPU utilization capture.\n"
         cpufile="CPU$(date +%Y%m%d_%H%M%S%Z)"
         top -b -d 0.5 > "$cpufile".temp & 
 }
@@ -89,9 +90,9 @@ capturecpu()
 # display some information about the storage pools' activity
 zstatus()
 {
-        echo "\n"
+        echo -e \n
         zfs list
-        echo "\n"
+        echo -e \n
         zpool list -v
 }
 
@@ -123,6 +124,7 @@ populate
 workload
 zstatus
 grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-38 > "$cpufile".txt
-#rm "$cpufile".temp
+rm "$cpufile".temp
+echo -e "\nCPU stats are stored in "$cpufile".txt\n"
 
 exit 0
