@@ -35,7 +35,7 @@ zdestroy()
 
         if [ -e "$poolanaheimdir" ]
         then
-                echo -e "Existing zpool present. Destroying with the command \` zpool destroy "$poolanaheim"\`\n"
+                echo -e "Existing zpool present. Destroying with the command \`zpool destroy "$poolanaheim"\`\n"
                 zpool destroy "$poolanaheim"
         else
                 echo -e "zpool "$poolanaheim" not present.\n"
@@ -65,7 +65,7 @@ populate()
 {
         echo "Populating zpool "$poolanaheim", please wait..."
         source "$HOME"/zfsproject/populate.sh -d "$poolanaheimdir"/data > /dev/null
-        echo ""$poolanaheim" populated."
+        echo -e ""$poolanaheim" populated.\n"
 }
 
 # workload - Call the workload script
@@ -87,12 +87,21 @@ capturecpu()
         top -b -d 0.5 > "$cpufile".temp & 
 }
 
+# cpubenchmrk - process the CPU usage capture to print the average
+cpubenchmrk()
+{
+        grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-38 > "$cpufile".txt
+        rm "$cpufile".temp
+        cpuavg="awk '{ total += $1; count++ } END { print total/count }' CPU20161202_004918UTC.txt"
+        echo -e "\nAverage CPU usage during operation: "$cpuavg"\n"
+}
+
 # display some information about the storage pools' activity
 zstatus()
 {
-        echo -e \n
+        echo -e "\n"
         zfs list
-        echo -e \n
+        echo -e "\n"
         zpool list -v
 }
 
@@ -123,8 +132,7 @@ capturecpu
 populate
 workload
 zstatus
-grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-38 > "$cpufile".txt
-rm "$cpufile".temp
-echo -e "\nCPU stats are stored in "$cpufile".txt\n"
+cpubenchmrk
+
 
 exit 0
