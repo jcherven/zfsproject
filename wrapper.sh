@@ -76,8 +76,8 @@ workload()
         echo "Workload complete."
 }
 
-# benchmark - Call the benchmark script
-benchmark()
+# capturecpu - Call the benchmark script
+capturecpu()
 {
         # echo "Pretending to run benchmark.sh"
         # Run top in batch mode to write to a file,
@@ -89,7 +89,9 @@ benchmark()
 # display some information about the storage pools' activity
 zstatus()
 {
+        echo "\n"
         zfs list
+        echo "\n"
         zpool list -v
 }
 
@@ -116,11 +118,11 @@ done
 
 zdestroy
 zcreate
-benchmark 
+capturecpu 
 populate
 workload
 zstatus
-grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-39 > "$cpufile".txt
+grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-38 > "$cpufile".txt
 #rm "$cpufile".temp
 
 exit 0
