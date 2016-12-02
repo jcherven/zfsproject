@@ -92,7 +92,7 @@ cpubenchmrk()
 {
         grep -F "%Cpu(s):" "$cpufile".temp | cut -c 37-38 > "$cpufile".txt
         rm "$cpufile".temp
-        cpuavg="awk '{ total += $1; count++ } END { print total/count }' CPU20161202_004918UTC.txt"
+        cpuavg=$(awk '{ total += $1; count++ } END { print total/count }' CPU20161202_004918UTC.txt)
         echo -e "\nAverage CPU usage during operation: "$cpuavg"\n"
 }
 
